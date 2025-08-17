@@ -15,11 +15,15 @@ export const dynamic = 'force-dynamic';
 
 // Exclude reviews by default per request
 const DETAILS_DEFAULT_FIELDS = [
-  'id',
-  'displayName',
-  'formattedAddress',
+  'shortFormattedAddress',
+  'primaryType',
+  'rating',
   'userRatingCount',
-  'location',
+  'currentOpeningHours.openNow',
+  'regularOpeningHours.weekdayDescriptions',
+  'googleMapsUri',
+  'websiteUri',
+  'businessStatus',
 ].join(',');
 
 // Simple concurrency with batching

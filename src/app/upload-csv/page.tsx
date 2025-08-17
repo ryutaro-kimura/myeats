@@ -26,6 +26,21 @@ function getFirstCsvField(line: string): string | null {
   return field.length > 0 ? field : null;
 }
 
+// Google Places businessStatus を日本語表示に整形（4パターン）
+function formatBusinessStatus(status?: string): string {
+  switch (status) {
+    case 'OPERATIONAL':
+      return '営業中';
+    case 'CLOSED_TEMPORARILY':
+      return '臨時休業';
+    case 'CLOSED_PERMANENTLY':
+      return '閉業';
+    case 'BUSINESS_STATUS_UNSPECIFIED':
+    default:
+      return '不明';
+  }
+}
+
 export default function UploadCsvPage() {
   const [fileName, setFileName] = React.useState<string>('');
   const [titles, setTitles] = React.useState<string[]>([]);
@@ -164,8 +179,56 @@ export default function UploadCsvPage() {
                 {r?.details?.displayName?.text && (
                   <div className="text-gray-600">displayName: {r.details.displayName.text}</div>
                 )}
-                {r?.details?.formattedAddress && (
-                  <div className="text-gray-600">address: {r.details.formattedAddress}</div>
+                {r?.details?.shortFormattedAddress && (
+                  <div className="text-gray-600">shortFormattedAddress: {r.details.shortFormattedAddress}</div>
+                )}
+                {typeof r?.details?.primaryType === 'string' && (
+                  <div className="text-gray-700">primaryType: {r.details.primaryType}</div>
+                )}
+                {typeof r?.details?.rating === 'number' && (
+                  <div className="text-gray-700">rating: {r.details.rating.toFixed(1)}{typeof r?.details?.userRatingCount === 'number' ? ` (${r.details.userRatingCount})` : ''}</div>
+                )}
+                {typeof r?.details?.currentOpeningHours?.openNow === 'boolean' && (
+                  <div className={r.details.currentOpeningHours.openNow ? 'text-green-700' : 'text-red-700'}>
+                    {r.details.currentOpeningHours.openNow ? '営業中' : '営業時間外'}
+                  </div>
+                )}
+                {Array.isArray(r?.details?.regularOpeningHours?.weekdayDescriptions) && r.details.regularOpeningHours.weekdayDescriptions.length > 0 && (
+                  <div className="mt-1">
+                    <div className="text-gray-700">営業時間:</div>
+                    <ul className="pl-5 list-disc text-gray-600">
+                      {r.details.regularOpeningHours.weekdayDescriptions.map((w: string, i: number) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {typeof r?.details?.businessStatus === 'string' && (
+                  <div className="text-gray-700">閉業/営業中：{formatBusinessStatus(r.details.businessStatus)}</div>
+                )}
+                {(r?.details?.googleMapsUri || r?.details?.websiteUri) && (
+                  <div className="mt-1 flex flex-wrap gap-3">
+                    {r?.details?.googleMapsUri && (
+                      <a
+                        href={r.details.googleMapsUri}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Google Maps
+                      </a>
+                    )}
+                    {r?.details?.websiteUri && (
+                      <a
+                        href={r.details.websiteUri}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Website
+                      </a>
+                    )}
+                  </div>
                 )}
               </li>
             ))}
