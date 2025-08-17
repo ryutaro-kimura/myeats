@@ -18,8 +18,8 @@ const DETAILS_DEFAULT_FIELDS = [
   'id',
   'displayName',
   'formattedAddress',
-  'internationalPhoneNumber',
-  'currentOpeningHours',
+  'userRatingCount',
+  'location',
 ].join(',');
 
 // Simple concurrency with batching
@@ -48,11 +48,10 @@ export async function POST(req: Request): Promise<Response> {
       return Response.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
-    const { names, prefecture, language = 'ja', textSearchFields, detailsFields } = body as {
+    const { names, prefecture, language = 'ja', detailsFields } = body as {
       names: unknown;
       prefecture: 'tokyo' | 'fukuoka';
       language?: string;
-      textSearchFields?: string;
       detailsFields?: string;
     };
 
@@ -69,6 +68,8 @@ export async function POST(req: Request): Promise<Response> {
       .map((s) => s.trim())
       .filter((f) => f && f !== 'reviews')
       .join(',');
+
+    // const detFields = '*'
 
     const BATCH = 5; // concurrency limit
 
