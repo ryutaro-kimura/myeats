@@ -148,3 +148,142 @@
 メモ
 - 実際のレスポンスは FieldMask に依存。不要なフィールドはコスト増・レイテンシ増につながるため最小化を推奨。
 - 本プロジェクトの `/api/name-to-detail` は reviews を除外し、必要最小限の detailsFields を既定で使用します。
+
+## primaryType 値（想定一覧・飲食系）
+- primaryType は以下のいずれかになります（飲食系にフォーカスした想定値）。Google の仕様変更により追加・変更・廃止される可能性があります。
+- 注: アスタリスク（*）が付いているタイプは、2024 年 11 月 7 日のリリースで追加されました。
+
+- `acai_shop` *
+- `afghani_restaurant` *
+- `african_restaurant` *
+- `american_restaurant`
+- `asian_restaurant` *
+- `bagel_shop` *
+- `bakery`
+- `bar`
+- `bar_and_grill` *
+- `barbecue_restaurant`
+- `brazilian_restaurant`
+- `breakfast_restaurant`
+- `brunch_restaurant`
+- `buffet_restaurant` *
+- `cafe`
+- `cafeteria` *
+- `candy_store` *
+- `cat_cafe` *
+- `chinese_restaurant`
+- `chocolate_factory` *
+- `chocolate_shop` *
+- `coffee_shop`
+- `confectionery` *
+- `deli` *
+- `dessert_restaurant` *
+- `dessert_shop` *
+- `diner` *
+- `dog_cafe` *
+- `donut_shop` *
+- `fast_food_restaurant`
+- `fine_dining_restaurant` *
+- `food_court` *
+- `french_restaurant`
+- `greek_restaurant`
+- `hamburger_restaurant`
+- `ice_cream_shop`
+- `indian_restaurant`
+- `indonesian_restaurant`
+- `italian_restaurant`
+- `japanese_restaurant`
+- `juice_shop` *
+- `korean_restaurant` *
+- `lebanese_restaurant`
+- `meal_delivery`
+- `meal_takeaway`
+- `mediterranean_restaurant`
+- `mexican_restaurant`
+- `middle_eastern_restaurant`
+- `pizza_restaurant`
+- `pub` *
+- `ramen_restaurant`
+- `restaurant`
+- `sandwich_shop`
+- `seafood_restaurant`
+- `spanish_restaurant`
+- `steak_house`
+- `sushi_restaurant`
+- `tea_house` *
+- `thai_restaurant`
+- `turkish_restaurant`
+- `vegan_restaurant`
+- `vegetarian_restaurant`
+- `vietnamese_restaurant`
+- `wine_bar` *
+
+## primaryType ごとの代表アイコン
+- 代表アイコンは UI での識別を目的とした目安です（絵文字）。必要に応じてデザインシステムのアイコンに置換してください。
+
+| primaryType | Icon |
+|---|---|
+| acai_shop | 🥤 |
+| afghani_restaurant | 🥘 |
+| african_restaurant | 🥘 |
+| american_restaurant | 🍔 |
+| asian_restaurant | 🥢 |
+| bagel_shop | 🥯 |
+| bakery | 🥐 |
+| bar | 🍸 |
+| bar_and_grill | 🍖 |
+| barbecue_restaurant | 🍖 |
+| brazilian_restaurant | 🥩 |
+| breakfast_restaurant | 🍳 |
+| brunch_restaurant | 🥞 |
+| buffet_restaurant | 🍽️ |
+| cafe | ☕ |
+| cafeteria | 🍽️ |
+| candy_store | 🍬 |
+| cat_cafe | 🐱 |
+| chinese_restaurant | 🥟 |
+| chocolate_factory | 🍫 |
+| chocolate_shop | 🍫 |
+| coffee_shop | ☕ |
+| confectionery | 🍰 |
+| deli | 🥪 |
+| dessert_restaurant | 🍰 |
+| dessert_shop | 🍨 |
+| diner | 🍽️ |
+| dog_cafe | 🐶 |
+| donut_shop | 🍩 |
+| fast_food_restaurant | 🍟 |
+| fine_dining_restaurant | 🍷 |
+| food_court | 🛍️ |
+| french_restaurant | 🥖 |
+| greek_restaurant | 🥙 |
+| hamburger_restaurant | 🍔 |
+| ice_cream_shop | 🍨 |
+| indian_restaurant | 🍛 |
+| indonesian_restaurant | 🍛 |
+| italian_restaurant | 🍝 |
+| japanese_restaurant | 🍱 |
+| juice_shop | 🧃 |
+| korean_restaurant | 🥘 |
+| lebanese_restaurant | 🧆 |
+| meal_delivery | 🚚 |
+| meal_takeaway | 🥡 |
+| mediterranean_restaurant | 🫒 |
+| mexican_restaurant | 🌮 |
+| middle_eastern_restaurant | 🧆 |
+| pizza_restaurant | 🍕 |
+| pub | 🍻 |
+| ramen_restaurant | 🍜 |
+| restaurant | 🍽️ |
+| sandwich_shop | 🥪 |
+| seafood_restaurant | 🐟 |
+| spanish_restaurant | 🥘 |
+| steak_house | 🥩 |
+| sushi_restaurant | 🍣 |
+| tea_house | 🫖 |
+| thai_restaurant | 🌶️ |
+| turkish_restaurant | 🥙 |
+| vegan_restaurant | 🥗 |
+| vegetarian_restaurant | 🥗 |
+| vietnamese_restaurant | 🍜 |
+| wine_bar | 🍷 |

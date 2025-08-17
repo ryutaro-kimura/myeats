@@ -19,6 +19,7 @@ export default function PlaceDetailPage({ params }: { params: { placeId: string 
       displayName: { text: name || 'Place' },
       shortFormattedAddress: search.get('addr') || undefined,
       primaryType: search.get('type') || undefined,
+      primaryTypeDisplayName: search.get('typeName') || undefined,
       rating: search.get('rating') ? Number(search.get('rating')) : undefined,
       userRatingCount: search.get('ratings') ? Number(search.get('ratings')) : undefined,
       currentOpeningHours: { openNow: search.get('open') ? search.get('open') === '1' : undefined },

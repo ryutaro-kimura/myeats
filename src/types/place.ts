@@ -2,6 +2,7 @@ export type PlaceDetailsPartial = {
   displayName?: { text?: string; languageCode?: string };
   shortFormattedAddress?: string;
   primaryType?: string;
+  primaryTypeDisplayName?: string;
   rating?: number;
   userRatingCount?: number;
   currentOpeningHours?: { openNow?: boolean };

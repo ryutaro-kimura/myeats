@@ -8,6 +8,7 @@ type PlaceDetailsPartial = {
   displayName?: { text?: string; languageCode?: string };
   shortFormattedAddress?: string;
   primaryType?: string;
+  primaryTypeDisplayName?: string;
   rating?: number;
   userRatingCount?: number;
   currentOpeningHours?: { openNow?: boolean };
@@ -227,8 +228,8 @@ export default function UploadCsvPage() {
                 {r?.details?.shortFormattedAddress && (
                   <div className="text-gray-600">shortFormattedAddress: {r.details.shortFormattedAddress}</div>
                 )}
-                {typeof r?.details?.primaryType === 'string' && (
-                  <div className="text-gray-700">primaryType: {r.details.primaryType}</div>
+                {typeof r?.details?.primaryTypeDisplayName === 'string' && (
+                  <div className="text-gray-700">primaryTypeDisplayName: {r.details.primaryTypeDisplayName}</div>
                 )}
                 {typeof r?.details?.rating === 'number' && (
                   <div className="text-gray-700">rating: {r.details.rating.toFixed(1)}{typeof r?.details?.userRatingCount === 'number' ? ` (${r.details.userRatingCount})` : ''}</div>

@@ -16,6 +16,7 @@ export const dynamic = 'force-dynamic';
 const DETAILS_DEFAULT_FIELDS = [
   'shortFormattedAddress',
   'primaryType',
+  'primaryTypeDisplayName',
   'rating',
   'userRatingCount',
   'currentOpeningHours.openNow',

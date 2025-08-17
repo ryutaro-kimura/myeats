@@ -27,7 +27,7 @@
   "names": ["一蘭 天神本店", "スターバックス 渋谷"], // 必須、空でない文字列配列
   "prefecture": "fukuoka",                        // 必須: 'tokyo' | 'fukuoka'
   "language": "ja",                                // 任意、既定 'ja'
-  "detailsFields": "shortFormattedAddress,primaryType,rating,userRatingCount,currentOpeningHours.openNow,regularOpeningHours.weekdayDescriptions,googleMapsUri,websiteUri,businessStatus" // 任意（既定）
+  "detailsFields": "shortFormattedAddress,primaryType,primaryTypeDisplayName,rating,userRatingCount,currentOpeningHours.openNow,regularOpeningHours.weekdayDescriptions,googleMapsUri,websiteUri,businessStatus" // 任意（既定）
 }
 ```
 - 備考
