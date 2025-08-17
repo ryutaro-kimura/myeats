@@ -2,7 +2,8 @@ export type PlaceDetailsPartial = {
   displayName?: { text?: string; languageCode?: string };
   shortFormattedAddress?: string;
   primaryType?: string;
-  primaryTypeDisplayName?: string;
+  // primaryTypeDisplayName is an object per Google Places: { text, languageCode }
+  primaryTypeDisplayName?: { text?: string; languageCode?: string };
   rating?: number;
   userRatingCount?: number;
   currentOpeningHours?: { openNow?: boolean };

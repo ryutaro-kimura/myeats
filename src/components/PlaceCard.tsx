@@ -29,10 +29,10 @@ export function PlaceCard({ item }: { item: ApiResultItem }) {
           {d?.shortFormattedAddress && (
             <p className="text-sm text-gray-600">{d.shortFormattedAddress}</p>
           )}
-          {d?.primaryTypeDisplayName && (
+          {d?.primaryTypeDisplayName?.text && (
             <p className="text-sm text-gray-700 mt-1">
               <span className="mr-1" aria-hidden>{icon}</span>
-              {d.primaryTypeDisplayName}
+              {d.primaryTypeDisplayName.text}
             </p>
           )}
           {typeof d?.rating === 'number' && (
@@ -54,7 +54,7 @@ export function PlaceCard({ item }: { item: ApiResultItem }) {
             {item.placeId && (
               <Link
                 className="text-blue-600 text-sm hover:underline"
-                href={`/places/${item.placeId}?name=${encodeURIComponent(item.name)}${d?.shortFormattedAddress ? `&addr=${encodeURIComponent(d.shortFormattedAddress)}` : ''}${d?.primaryType ? `&type=${encodeURIComponent(d.primaryType)}` : ''}${typeof d?.rating === 'number' ? `&rating=${encodeURIComponent(String(d.rating))}` : ''}${typeof d?.userRatingCount === 'number' ? `&ratings=${encodeURIComponent(String(d.userRatingCount))}` : ''}${typeof d?.currentOpeningHours?.openNow === 'boolean' ? `&open=${d.currentOpeningHours.openNow ? '1' : '0'}` : ''}${d?.businessStatus ? `&status=${encodeURIComponent(d.businessStatus)}` : ''}${d?.googleMapsUri ? `&maps=${encodeURIComponent(d.googleMapsUri)}` : ''}${d?.websiteUri ? `&site=${encodeURIComponent(d.websiteUri)}` : ''}`}
+                href={`/places/${item.placeId}?name=${encodeURIComponent(item.name)}${d?.shortFormattedAddress ? `&addr=${encodeURIComponent(d.shortFormattedAddress)}` : ''}${d?.primaryType ? `&type=${encodeURIComponent(d.primaryType)}` : ''}${typeof d?.rating === 'number' ? `&rating=${encodeURIComponent(String(d.rating))}` : ''}${typeof d?.userRatingCount === 'number' ? `&ratings=${encodeURIComponent(String(d.userRatingCount))}` : ''}${typeof d?.currentOpeningHours?.openNow === 'boolean' ? `&open=${d.currentOpeningHours.openNow ? '1' : '0'}` : ''}${d?.businessStatus ? `&status=${encodeURIComponent(d.businessStatus)}` : ''}${d?.googleMapsUri ? `&maps=${encodeURIComponent(d.googleMapsUri)}` : ''}${d?.websiteUri ? `&site=${encodeURIComponent(d.websiteUri)}` : ''}${d?.primaryTypeDisplayName?.text ? `&typeName=${encodeURIComponent(d.primaryTypeDisplayName.text)}` : ''}`}
               >
                 詳細
               </Link>

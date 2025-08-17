@@ -26,8 +26,8 @@ export function PlaceDetail({ item }: { item: ApiResultItem }) {
           <p className="text-gray-700">{d.shortFormattedAddress}</p>
         )}
         <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-700">
-          {d?.primaryTypeDisplayName && (
-            <span><span className="mr-1" aria-hidden>{icon}</span>{d.primaryTypeDisplayName}</span>
+          {d?.primaryTypeDisplayName?.text && (
+            <span><span className="mr-1" aria-hidden>{icon}</span>{d.primaryTypeDisplayName.text}</span>
           )}
           {typeof d?.rating === 'number' && (
             <span>評価 {d.rating.toFixed(1)}{typeof d?.userRatingCount === 'number' ? ` (${d.userRatingCount})` : ''}</span>
