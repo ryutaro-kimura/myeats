@@ -1,32 +1,27 @@
-'use client';
-
 import React from 'react';
-import { useSearchParams } from 'next/navigation';
 import { PlaceDetail } from '@/components/PlaceDetail';
 import type { ApiResultItem } from '@/types/place';
 
-// NOTE: データ取得は本来 placeId でサーバーから取得すべきですが、
-// ここではモック/検索パラメータからの受け渡しを想定した雛形です。
-
-export default function PlaceDetailPage({ params }: { params: { placeId: string } }) {
-  const search = useSearchParams();
-  const name = search.get('name') || '';
+export default async function PlaceDetailPage({ params, searchParams }: any) {
+  const p = await params;
+  const sp = await searchParams;
+  const name = (sp?.name as string) || '';
 
   const item: ApiResultItem = {
     name,
-    placeId: params.placeId,
+    placeId: p?.placeId as string,
     details: {
       displayName: { text: name || 'Place' },
-      shortFormattedAddress: search.get('addr') || undefined,
-      primaryType: search.get('type') || undefined,
-      primaryTypeDisplayName: search.get('typeName') ? { text: search.get('typeName') || undefined } : undefined,
-      rating: search.get('rating') ? Number(search.get('rating')) : undefined,
-      userRatingCount: search.get('ratings') ? Number(search.get('ratings')) : undefined,
-      currentOpeningHours: { openNow: search.get('open') ? search.get('open') === '1' : undefined },
+      shortFormattedAddress: (sp?.addr as string) || undefined,
+      primaryType: (sp?.type as string) || undefined,
+      primaryTypeDisplayName: sp?.typeName ? { text: sp.typeName as string } : undefined,
+      rating: sp?.rating ? Number(sp.rating) : undefined,
+      userRatingCount: sp?.ratings ? Number(sp.ratings) : undefined,
+      currentOpeningHours: { openNow: sp?.open ? (sp.open as string) === '1' : undefined },
       regularOpeningHours: { weekdayDescriptions: [] },
-      businessStatus: search.get('status') || undefined,
-      googleMapsUri: search.get('maps') || undefined,
-      websiteUri: search.get('site') || undefined,
+      businessStatus: (sp?.status as string) || undefined,
+      googleMapsUri: (sp?.maps as string) || undefined,
+      websiteUri: (sp?.site as string) || undefined,
     },
   };
 
