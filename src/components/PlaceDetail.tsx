@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ApiResultItem } from '@/types/place';
-import { iconForprimaryTypeDisplayName } from '@/lib/setPrimaryTypeIcon';
+import { iconsForPrimaryType } from '@/lib/setPrimaryTypeIcon';
 
 function statusLabel(status?: string) {
   switch (status) {
@@ -17,7 +17,7 @@ function statusLabel(status?: string) {
 
 export function PlaceDetail({ item }: { item: ApiResultItem }) {
   const d = item.details;
-  const icon = iconForprimaryTypeDisplayName(d?.primaryType);
+  const icons = iconsForPrimaryType(d?.primaryType);
   return (
     <div className="space-y-4">
       <div>
@@ -27,7 +27,12 @@ export function PlaceDetail({ item }: { item: ApiResultItem }) {
         )}
         <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-700">
           {d?.primaryTypeDisplayName?.text && (
-            <span><span className="mr-1" aria-hidden>{icon}</span>{d.primaryTypeDisplayName.text}</span>
+            <span className="inline-flex items-center gap-1">
+              {icons.map((ic, i) => (
+                <span key={i} aria-hidden>{ic}</span>
+              ))}
+              <span>{d.primaryTypeDisplayName.text}</span>
+            </span>
           )}
           {typeof d?.rating === 'number' && (
             <span>評価 {d.rating.toFixed(1)}{typeof d?.userRatingCount === 'number' ? ` (${d.userRatingCount})` : ''}</span>

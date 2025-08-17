@@ -1,4 +1,4 @@
-const MAP: Record<string, string> = {
+const MAP: Record<string, string | string[]> = {
   acai_shop: '🥤',
   afghani_restaurant: '🥘',
   african_restaurant: '🥘',
@@ -38,35 +38,44 @@ const MAP: Record<string, string> = {
   indian_restaurant: '🍛',
   indonesian_restaurant: '🍛',
   italian_restaurant: '🍝',
-  japanese_restaurant: '🍱',
+  japanese_restaurant: ['🍱', '🍣', '🍶'],
   juice_shop: '🧃',
   korean_restaurant: '🥘',
   lebanese_restaurant: '🧆',
   meal_delivery: '🚚',
   meal_takeaway: '🥡',
   mediterranean_restaurant: '🫒',
-  mexican_restaurant: '🌮',
+  mexican_restaurant: ['🌮', '🌯', '🥑'],
   middle_eastern_restaurant: '🧆',
-  pizza_restaurant: '🍕',
-  pub: '🍻',
-  ramen_restaurant: '🍜',
+  pizza_restaurant: ['🍕', '🧀'],
+  pub: ['🍻', '🍺'],
+  ramen_restaurant: ['🍜', '🥟', '🥚'],
   restaurant: '🍽️',
   sandwich_shop: '🥪',
-  seafood_restaurant: '🐟',
+  seafood_restaurant: ['🐟', '🦐', '🦑'],
   spanish_restaurant: '🥘',
-  steak_house: '🥩',
-  sushi_restaurant: '🍣',
+  steak_house: ['🥩', '🍷'],
+  sushi_restaurant: ['🍣', '🍶', '🐟'],
   tea_house: '🫖',
-  thai_restaurant: '🌶️',
+  thai_restaurant: ['🌶️', '🍜'],
   turkish_restaurant: '🥙',
-  vegan_restaurant: '🥗',
-  vegetarian_restaurant: '🥗',
-  vietnamese_restaurant: '🍜',
-  wine_bar: '🍷',
+  vegan_restaurant: ['🥗', '🌿'],
+  vegetarian_restaurant: ['🥗', '🥦'],
+  vietnamese_restaurant: ['🍜', '🥟', '🥬'],
+  wine_bar: ['🍷', '🧀'],
 };
 
-export function iconForprimaryTypeDisplayName(primaryType?: string): string {
-  if (!primaryType) return '';
+export function iconsForPrimaryType(primaryType?: string): string[] {
+  if (!primaryType) return [];
   const key = primaryType.trim().toLowerCase();
-  return MAP[key] || '🍽️';
+  const value = MAP[key] ?? '🍽️';
+  const arr = Array.isArray(value) ? value : [value];
+  // unique and max 3
+  return Array.from(new Set(arr)).slice(0, 3);
+}
+
+// Backward compatibility export (deprecated)
+export function iconForprimaryTypeDisplayName(primaryType?: string): string {
+  const icons = iconsForPrimaryType(primaryType);
+  return icons[0] ?? '';
 }

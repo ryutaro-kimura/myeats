@@ -1,7 +1,7 @@
 import React from 'react';
 import type { ApiResultItem } from '@/types/place';
 import Link from 'next/link';
-import { iconForprimaryTypeDisplayName } from '@/lib/setPrimaryTypeIcon';
+import { iconsForPrimaryType } from '@/lib/setPrimaryTypeIcon';
 
 function statusLabel(status?: string) {
   switch (status) {
@@ -18,7 +18,7 @@ function statusLabel(status?: string) {
 
 export function PlaceCard({ item }: { item: ApiResultItem }) {
   const d = item.details;
-  const icon = iconForprimaryTypeDisplayName(d?.primaryType);
+  const icons = iconsForPrimaryType(d?.primaryType);
   return (
     <div className="border rounded p-4 bg-white shadow-sm">
       <div className="flex items-start justify-between gap-3">
@@ -30,9 +30,11 @@ export function PlaceCard({ item }: { item: ApiResultItem }) {
             <p className="text-sm text-gray-600">{d.shortFormattedAddress}</p>
           )}
           {d?.primaryTypeDisplayName?.text && (
-            <p className="text-sm text-gray-700 mt-1">
-              <span className="mr-1" aria-hidden>{icon}</span>
-              {d.primaryTypeDisplayName.text}
+            <p className="text-sm text-gray-700 mt-1 flex items-center gap-1">
+              {icons.map((ic, i) => (
+                <span key={i} aria-hidden>{ic}</span>
+              ))}
+              <span>{d.primaryTypeDisplayName.text}</span>
             </p>
           )}
           {typeof d?.rating === 'number' && (
