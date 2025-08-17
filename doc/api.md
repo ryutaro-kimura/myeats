@@ -27,12 +27,12 @@
   "names": ["一蘭 天神本店", "スターバックス 渋谷"], // 必須、空でない文字列配列
   "prefecture": "fukuoka",                        // 必須: 'tokyo' | 'fukuoka'
   "language": "ja",                                // 任意、既定 'ja'
-  "detailsFields": "id,displayName,formattedAddress,internationalPhoneNumber,currentOpeningHours" // 任意
+  "detailsFields": "shortFormattedAddress,primaryType,rating,userRatingCount,currentOpeningHours.openNow,regularOpeningHours.weekdayDescriptions,googleMapsUri,websiteUri,businessStatus" // 任意（既定）
 }
 ```
 - 備考
-  - `detailsFields` を指定しない場合の既定は `id,displayName,formattedAddress,internationalPhoneNumber,currentOpeningHours`。
-  - セキュリティ/コスト配慮のため、`reviews` は常に除外されます（明示指定してもサーバー側でフィルタされます）。
+  - detailsFields の既定値は上記の通り（実装の `DETAILS_DEFAULT_FIELDS` と一致）。
+  - セキュリティ/コスト配慮のため、`reviews` は常に除外されます（明示指定してもサーバー側でフィルタ）。
 
 ### レスポンス（200）
 ```
@@ -42,7 +42,7 @@
       "name": "一蘭 天神本店",
       "placeId": "<Google Place ID>",
       "textSearch": { ...最初の Text Search の結果(最小限) ... },
-      "details": { ...Place Details の結果... }
+      "details": { ...Place Details の結果（上記フィールド）... }
     }
   ],
   "errors": [
@@ -81,11 +81,24 @@ curl -sS -X POST http://localhost:3000/api/name-to-detail \
 
 ---
 
+## 2. CSV アップロード画面（/upload-csv）
+- 1列目の見出しが「タイトル」の CSV を想定します。先頭行をヘッダとしてスキップし、以降の行の1列目を抽出します。
+- 重複は順序を保ったまま除外します。
+- 都道府県（prefecture）は UI 上で `tokyo`/`fukuoka` から選択します。
+- 抽出したタイトル配列をそのまま `/api/name-to-detail` に POST します。
+- 成功/失敗件数、主要な Place Details フィールド（住所、評価、営業時間、Google Maps/公式サイトリンクなど）をリスト表示します。
+
+Tips
+- CSV の改行コード（CRLF/CR）を自動正規化します。Excel/スプレッドシート由来の CSV でもそのままアップロード可です。
+- 先頭に BOM が付与された場合でも自動でトリムします。
+
+---
+
 ## 参考（内部実装メモ）
 - 内部では Google Places API v1 を使用
   - Text Search: `POST https://places.googleapis.com/v1/places:searchText`
     - FieldMask は ID 解決のため `places.id` のみを使用
   - Place Details: `GET https://places.googleapis.com/v1/places/{place_id}`
     - FieldMask は `detailsFields`（ただし `reviews` は常に除外）
-- 並行処理: 5 件ずつのバッチで `Promise.allSettled` を使用
+- 並行処理: 5 件ずつのバッチで `Promise.all` を使用（各タスクで例外を握りつぶして成功/失敗を自前表現）。
 - 失敗時は名前ごとに `errors` に格納（成功分は `results`）

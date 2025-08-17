@@ -1,7 +1,36 @@
 'use client';
 
 import React from 'react';
+import type { Prefecture } from '@/lib/googlePlaces';
 
+// ---- Types ----
+type PlaceDetailsPartial = {
+  displayName?: { text?: string; languageCode?: string };
+  shortFormattedAddress?: string;
+  primaryType?: string;
+  rating?: number;
+  userRatingCount?: number;
+  currentOpeningHours?: { openNow?: boolean };
+  regularOpeningHours?: { weekdayDescriptions?: string[] };
+  businessStatus?: string;
+  googleMapsUri?: string;
+  websiteUri?: string;
+};
+
+type ApiResultItem = {
+  name: string;
+  placeId?: string;
+  textSearch?: unknown;
+  details?: PlaceDetailsPartial;
+};
+
+type ApiErrorItem = {
+  name?: string;
+  message?: string;
+  stage?: string;
+};
+
+// ---- CSV helpers ----
 function getFirstCsvField(line: string): string | null {
   // Trim BOM and whitespace
   if (!line) return null;
@@ -26,6 +55,27 @@ function getFirstCsvField(line: string): string | null {
   return field.length > 0 ? field : null;
 }
 
+function parseCsvTitles(text: string): string[] {
+  const norm = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = norm.split('\n').map((l) => l.trim());
+  if (lines.length === 0) return [];
+  const dataLines = lines.slice(1).filter((l) => l.length > 0);
+  const extracted: string[] = [];
+  for (const line of dataLines) {
+    const first = getFirstCsvField(line);
+    if (first && first !== 'タイトル') extracted.push(first);
+  }
+  // de-duplicate while preserving order
+  const seen = new Set<string>();
+  const unique = extracted.filter((t) => {
+    const key = t.trim();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  return unique;
+}
+
 // Google Places businessStatus を日本語表示に整形（4パターン）
 function formatBusinessStatus(status?: string): string {
   switch (status) {
@@ -45,10 +95,10 @@ export default function UploadCsvPage() {
   const [fileName, setFileName] = React.useState<string>('');
   const [titles, setTitles] = React.useState<string[]>([]);
   const [error, setError] = React.useState<string>('');
-  const [prefecture, setPrefecture] = React.useState<'tokyo' | 'fukuoka'>('fukuoka');
+  const [prefecture, setPrefecture] = React.useState<Prefecture>('fukuoka');
   const [loading, setLoading] = React.useState(false);
-  const [results, setResults] = React.useState<any[]>([]);
-  const [errors, setErrors] = React.useState<any[]>([]);
+  const [results, setResults] = React.useState<ApiResultItem[]>([]);
+  const [errors, setErrors] = React.useState<ApiErrorItem[]>([]);
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('');
@@ -60,29 +110,13 @@ export default function UploadCsvPage() {
     setFileName(file.name);
     try {
       const text = await file.text();
-      const norm = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-      const lines = norm.split('\n').map((l) => l.trim());
-      if (lines.length === 0) {
+      const unique = parseCsvTitles(text);
+      if (unique.length === 0) {
         setError('CSV が空です');
         return;
       }
-      // skip header line(s). Assume first line is header.
-      const dataLines = lines.slice(1).filter((l) => l.length > 0);
-      const extracted: string[] = [];
-      for (const line of dataLines) {
-        const first = getFirstCsvField(line);
-        if (first && first !== 'タイトル') extracted.push(first);
-      }
-      // de-duplicate while preserving order
-      const seen = new Set<string>();
-      const unique = extracted.filter((t) => {
-        const key = t.trim();
-        if (!key || seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
       setTitles(unique);
-    } catch (err: any) {
+    } catch (err) {
       console.error('[upload-csv] parse error', err);
       setError('CSV の解析に失敗しました');
     }
@@ -105,12 +139,14 @@ export default function UploadCsvPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data?.error || 'API エラー');
+        setError((data as any)?.error || 'API エラー');
       } else {
-        setResults(Array.isArray(data?.results) ? data.results : []);
-        setErrors(Array.isArray(data?.errors) ? data.errors : []);
+        const okResults = Array.isArray((data as any)?.results) ? (data as any).results as ApiResultItem[] : [];
+        const ngErrors = Array.isArray((data as any)?.errors) ? (data as any).errors as ApiErrorItem[] : [];
+        setResults(okResults);
+        setErrors(ngErrors);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('[upload-csv] api error', err);
       setError('ネットワークエラー');
     } finally {
@@ -132,7 +168,7 @@ export default function UploadCsvPage() {
         <label className="text-sm text-gray-700">Prefecture:</label>
         <select
           value={prefecture}
-          onChange={(e) => setPrefecture(e.target.value as any)}
+          onChange={(e) => setPrefecture(e.target.value as Prefecture)}
           className="border rounded px-2 py-1 bg-white"
         >
           <option value="tokyo">tokyo</option>
@@ -193,11 +229,11 @@ export default function UploadCsvPage() {
                     {r.details.currentOpeningHours.openNow ? '営業中' : '営業時間外'}
                   </div>
                 )}
-                {Array.isArray(r?.details?.regularOpeningHours?.weekdayDescriptions) && r.details.regularOpeningHours.weekdayDescriptions.length > 0 && (
+                {Array.isArray(r?.details?.regularOpeningHours?.weekdayDescriptions) && r.details.regularOpeningHours!.weekdayDescriptions!.length > 0 && (
                   <div className="mt-1">
                     <div className="text-gray-700">営業時間:</div>
                     <ul className="pl-5 list-disc text-gray-600">
-                      {r.details.regularOpeningHours.weekdayDescriptions.map((w: string, i: number) => (
+                      {r.details.regularOpeningHours!.weekdayDescriptions!.map((w: string, i: number) => (
                         <li key={i}>{w}</li>
                       ))}
                     </ul>
