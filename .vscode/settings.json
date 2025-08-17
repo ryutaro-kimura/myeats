@@ -1,0 +1,40 @@
+{
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        {
+            "text": "必ず日本語で記述してください"
+        },
+        {
+            "text": "Conventional Commits形式で記述してください"
+        },
+        {
+            "text": "1行目に簡潔な説明、2行目に空行、3行目以降に詳細を書く形式で記述してください"
+        },
+        {
+            "text": "プレフィックスとして次のいずれかを使用してください。modify: ✨ fix: 🐛 feat: ✨ refactor: ♻️ style: 💄 test: ✅ docs: 📚 chore: 🔧"
+        },
+        {
+            "text": "例: modify: ✨ ユーザー名の表示を変更"
+        },
+        {
+            "text": "例: fix: 🐛 ユーザー名が表示されないバグを修正"
+        },
+        {
+            "text": "例: feat: ✨ ユーザー名の表示を追加"
+        },
+        {
+            "text": "例: refactor: ♻️ ユーザー名の表示をリファクタリング"
+        },
+        {
+            "text": "例: style: 💄 ユーザー名の表示を修正"
+        },
+        {
+            "text": "例: test: ✅ ユーザー名の表示をテスト"
+        },
+        {
+            "text": "例: docs: 📚 ユーザー名の表示をドキュメント"
+        },
+        {
+            "text": "例: chore: 🔧 ユーザー名の表示をタスク"
+        }
+    ],
+}
