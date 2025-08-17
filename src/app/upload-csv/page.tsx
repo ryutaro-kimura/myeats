@@ -158,6 +158,7 @@ export default function UploadCsvPage() {
     <main className="max-w-3xl mx-auto my-10 px-4">
       <h1 className="text-2xl font-bold mb-4">CSV アップロード（タイトル抽出 → API 実行）</h1>
       <p className="mb-3">1列目「タイトル」の値を抽出し、/api/name-to-detail で詳細解決します。</p>
+      <p className="mb-4 text-sm text-gray-600">本運用は「Places」ページの「CSVからインポート」から行ってください。</p>
 
       <label className="inline-block mb-3">
         <input type="file" accept=".csv" onChange={onFileChange} className="block" />
@@ -211,6 +212,14 @@ export default function UploadCsvPage() {
               <li key={r?.placeId || idx}>
                 <div>
                   <strong>{r?.name}</strong> — placeId: {r?.placeId || '-'}
+                  {r?.placeId && (
+                    <a
+                      className="ml-3 text-blue-600 hover:underline"
+                      href={`/places/${r.placeId}?name=${encodeURIComponent(r.name)}${r.details?.shortFormattedAddress ? `&addr=${encodeURIComponent(r.details.shortFormattedAddress)}` : ''}`}
+                    >
+                      詳細へ
+                    </a>
+                  )}
                 </div>
                 {r?.details?.displayName?.text && (
                   <div className="text-gray-600">displayName: {r.details.displayName.text}</div>
